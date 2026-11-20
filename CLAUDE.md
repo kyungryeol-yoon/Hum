@@ -1,43 +1,45 @@
 # Hum
 
-> 이름: **Hum**(2026-11-20) — 영어로 기계·컴퓨터가 일할 때 내는 낮은 「웅웅」 소리. *humming along* = 「순조롭게 잘 돌아가고 있다」. 「내 맥이 지금 잘 돌아가고 있나」를 보는 앱이라서. 저장소·앱·cask 이름 모두 `hum`/Hum(Homebrew에 같은 이름 없음 확인)
+맥이 얼마나 바쁜지 메뉴 막대의 **칩 아이콘** 색으로 보여 주고, 누르면 자세한 상태 창이 뜨는 앱. 이름은 기계가 일할 때 내는 「웅웅」 소리(*humming along* = 잘 돌아가고 있다).
 
-맥의 부하(CPU·메모리·GPU)를 메뉴 막대의 **칩 아이콘** 하나로 보여 주고, 클릭하면 자세한 상태를 보여 주는 앱. RunCat이 업데이트 정책·평이 안 좋아서 직접 만듦 — **RunCat의 이름·그림·생김새는 쓰지 않는다**(달리는 캐릭터 대신 칩 아이콘으로 감)
-- GitHub `kyungryeol-yoon/hum`에 **범용**으로 공개 예정 — 특정 사용자 환경에 맞춘 기본값·코드를 넣지 말 것. **커밋·푸시는 사용자가 요청할 때만**
-- 사용자용 설명은 `README.md`(공개), 개발 메모는 이 파일
-- DiSwitch(`../DiSwitch`)와 같은 방식: Swift + SwiftPM, 외부 라이브러리 없이, 애플 실리콘·macOS 15+, ad-hoc 서명, 태그 → GitHub Release → `homebrew-tap` cask(같은 tap·같은 `TAP_TOKEN`). 빌드·배포 스크립트는 DiSwitch 것을 가져다 고침
-- 설명은 한국어
+- GitHub `kyungryeol-yoon/hum`(공개) — **범용**으로: 특정 사용자 환경에 맞춘 기본값·코드 금지. **커밋·푸시는 요청할 때만**
+- RunCat 대신 만든 앱 — **RunCat의 이름·그림·생김새는 쓰지 않는다**(정보 항목만 참고)
+- Swift + SwiftPM, 외부 라이브러리 없음, 애플 실리콘·macOS 15+, ad-hoc 서명. 번들 ID `io.github.kyungryeol-yoon.hum`(앞으로 만들 앱도 `io.github.kyungryeol-yoon.<앱>`)
+- 사용자용 설명은 `README.md`, 개발 메모는 이 파일. 설명은 한국어
 
-## 정한 것(2026-11-20, DiSwitch 세션에서 논의)
-- **메뉴 막대 아이콘**: 칩(네 변에 핀 3개씩) 안에 세 값(CPU·메모리·GPU)을 담음. 모양은 설정에서 고름
-  - **A 막대형(기본)** — 세로 막대 셋 · **B 링형** — 바깥부터 CPU·메모리·GPU 고리 · **C 격자형** — 3줄 × 4칸(25%마다 한 칸) · **D 회로형** — 왼쪽 핀에서 들어오는 회선 셋, 신호가 차오른 만큼 사용 중
-  - 뺀 것: 진화 캐릭터(구름·새싹·로봇 — 안 예쁨), 핀형, 촘촘 회로형(22pt에서 뭉개짐), 퍼센트 글자만(노치에 가려짐·흔함)
-  - 22pt template 이미지. AppKit `NSStatusItem`(MenuBarExtra는 자주 다시 그리기 불편). 1~2초마다 다시 그림, 앱 자체가 가벼워야 함
-- **색**: 흑백 + 경고색(기본, 70% 이상 주황 `#ff9f0a` · 90% 이상 빨강 `#ff453a` — 그 항목만) / 항상 컬러(CPU 파랑 `#0a84ff` · 메모리 초록 `#30d158` · GPU 보라 `#bf5af2`). 메모리는 사용률 대신 **메모리 압박**으로 색을 정함
-- **옆에 숫자**: 없음(기본) / 가장 높은 값(`42%`) / 셋 다(`C42 M68 G12`)
-- **앱 아이콘**: 회로형(D)을 그대로 키움 — 어두운 바탕 + 컬러 회선 쪽으로 기울어 있음(확정 전). 촘촘한 회로 앱 아이콘은 복잡해서 뺌
-- 미리보기 페이지(`design/icon-preview.html`)는 아이콘을 칩으로 정한 뒤 지움(2026-11-20, 휴지통). 같은 내용의 claude.ai 비공개 페이지는 남아 있음 https://claude.ai/artifact/Wj4r6qp5DFFJMPjR9itZeA
+## 구조(`Sources/Hum/`)
+- `main.swift` — `NSStatusItem` 버튼(왼쪽 클릭: 상태 창, 오른쪽: 설정·끝내기 메뉴), `NSPopover`, 설정창
+- `Icon.swift` — 칩 아이콘(`ChipIcon`), 바쁜 정도 색
+- `Stats.swift` — CPU·메모리·GPU·디스크·네트워크·배터리·발열 읽기
+- `Processes.swift` — 많이 쓰는 프로그램(`ProcessSampler`), 잠자기 막는 프로그램(`SleepBlockers`)
+- `Monitor.swift` — 갱신·기록(창이 열려 있을 때만 프로그램 목록 읽음)
+- `PanelView.swift` — 상태 창(SwiftUI) · `Settings.swift` — 설정 값·설정창
 
-## 메뉴(클릭하면) — 안
-- 기본: CPU(시스템·사용자) · 메모리 압박·스왑 · GPU · 디스크 남은 공간 · 네트워크 ↑↓
-- 차별점: **많이 쓰는 프로그램 3개**(눌러서 종료) · **잠자기를 막는 프로그램**(`pmset -g assertions` 같은 정보) · **발열 상태**(`ProcessInfo.thermalState`)
-- 나중에: 전력(CPU·GPU·ANE 와트 — 비공개 IOReport, 깨질 수 있음) · 열린 로컬 포트 · ollama 모델 · 블루투스 기기 배터리 · 인터넷 응답 속도
-- 얻는 방법: CPU `host_processor_info` · 메모리 `host_statistics64` · 디스크 `URLResourceValues` · 네트워크 `getifaddrs` · 배터리 `IOPowerSources` · GPU IORegistry `IOAccelerator`의 `PerformanceStatistics`
+## 정한 것
+- **아이콘**: 둥근 두꺼운 테두리 + 변마다 핀 3개, 안쪽 네모를 바쁜 정도 색으로 채움. 움직임 없음
+  - 바쁜 정도 = max(CPU, GPU). 0~50 초록 → 75 주황 → 92+ 빨강, 사이는 색상환을 따라 섞음(RGB로 섞으면 올리브색)
+  - 색이 5% 단위로 바뀔 때만 다시 그림. 옆 숫자: 없음 / 가장 높은 값 / 셋 다
+  - 시험하고 버린 것: 막대·링·격자형(4K에서 작음), 칩 몸통 채우기, 움직이는 회로·파형, 깜빡임(정신없음)
+- **상태 창**: 상태 한마디 + 큰 % · 최근 그래프 · 묶음별 카드(성능 / 저장 공간·연결 / 많이 쓰는 프로그램 / 잠자기를 막는 프로그램)
+  - 메모리 색은 사용률이 아니라 압박으로. 네트워크는 `en*`만 합침(VPN 중복 제외), 내부 IP 누르면 복사
+  - 프로그램은 도우미 프로세스를 바깥 `.app`으로 묶음, 내 계정 프로세스만. 종료는 `NSRunningApplication.terminate()`
+  - 잠자기 막는 프로그램: 이름 못 읽는 시스템 프로세스는 뺌
+- **설정**: 옆 숫자 · 갱신 간격 1/2/5초(기본 2) · 로그인 자동 실행(`SMAppService` — /Applications에 둔 뒤 켤 것)
+- **앱 아이콘**: 어두운 바탕 + 같은 칩(초록) — `packaging/make-icon.swift`로 `AppIcon.icns` 생성
+
+## 주의할 것
+- 메뉴 막대 그림을 자주 바꾸면 `button.image` 교체마다 항목 전체를 다시 그려 CPU 10%대 → 애니메이션이 필요하면 버튼 위 `CALayer.contents`만 바꿀 것. 지금 창 닫힌 상태 CPU 0.5% 안팎
+- 막대 애니메이션은 길이에만 걸 것(바깥에 걸면 창 높이 바뀔 때 막대가 글자 위로 미끄러짐)
+- 창 바깥 클릭: `.transient`만으로는 안 닫힘 → 창이 열린 동안만 전역 마우스 감시 + 앱 비활성화 때 닫음
+- SwiftUI body는 섹션 함수로 나누고 계산은 타입을 밝힌 함수로 — 한 덩어리면 CI 컴파일러가 타입 검사 시간 초과(v0.1.0 첫 빌드 실패 원인)
+
+## 빌드·배포
+- `./build.sh` → `build/Hum.app`. 시험할 땐 설치판을 끄고(`pkill -x Hum`) `open build/Hum.app` — `./build.sh install`은 brew 설치판을 덮어쓰므로 쓰지 않음
+- 태그 `vX.Y.Z` 푸시 → `.github/workflows/release.yml`(macos-26 + 최신 Xcode) → Release zip → `homebrew-tap`의 `Casks/hum.rb` 갱신(`TAP_TOKEN`)
+- cask 틀 `packaging/hum.rb`: `depends_on macos: :sequoia`, quarantine은 `postflight_steps`의 `run "/usr/bin/xattr"`로 지움(`writable_paths` 없으면 샌드박스가 막음)
+- 설치 `brew install --cask kyungryeol-yoon/tap/hum` — v0.1.0 설치 확인(2026-11-21)
 
 ## 다음에 할 것
-- [x] 사용자: GitHub에 `hum` 저장소 만들기(공개, 2026-11-20) — remote `https://github.com/kyungryeol-yoon/hum.git`. 저장소 시크릿 `TAP_TOKEN`도 넣음(사용자, 2026-11-20)
-- [x] SwiftPM 뼈대 + 메뉴 막대 아이콘 + 값 읽기(2026-11-20) — `./build.sh`로 `build/Hum.app`
-  - **아이콘은 「칩」 하나로 확정**(`ChipIcon.chipImage`): 둥근 두꺼운 테두리 + 변마다 핀 3개(끝 둥글게), 안쪽 네모를 바쁜 정도 색으로 채움. 바쁜 정도 = max(CPU, GPU). 색 0~50 초록 → 75 주황 → 92+ 빨강, 사이는 색상환을 따라 섞음(RGB로 섞으면 올리브색). 5% 단위로 바뀔 때만 다시 그림
-  - 시험하고 버린 것(사용자 반응): 막대형(작아서 4K에서 안 보임) · 상태색형(칩 몸통을 꽉 채움 — 「더 이상함」) · 움직이는 회로형(신호가 흐름) · 파형(가로 40pt 오실로스코프) · 깜빡이는 칩(「정신없음」). 위 「정한 것」의 A~D형·색 방식 옵션도 이걸로 대체됨
-  - 배운 것: 장면마다 `button.image`를 바꾸면 메뉴 막대 항목 전체를 다시 그려서 CPU 10~16% — 애니메이션을 다시 한다면 버튼 위 `CALayer.contents`만 바꿀 것(약 1.5%). 지금은 움직임이 없어서 창 닫힌 상태 CPU 0.5% 안팎
-- [x] 클릭 창(2026-11-20, `PanelView.swift`, NSPopover + SwiftUI): 상태 한 줄(여유로워요/조금 바빠요/바빠요/아주 바빠요) + 큰 % · 최근 바쁜 정도 그래프(60개) · CPU·메모리(색은 압박)·GPU 게이지 · 디스크·네트워크(en*만, 32비트 계수기 감쌈)·발열 칸 · 많이 쓰는 프로그램 3개(`ProcessSampler` — 도우미 프로세스를 바깥 .app으로 묶음, 마우스를 올리면 「종료」 = `NSRunningApplication.terminate()`, 내 계정 프로세스만) · 잠자기 막는 프로그램(`IOPMCopyAssertionsByProcess`, 이름 못 읽는 시스템 프로세스는 뺌). 프로그램 목록은 창이 열려 있을 때만 읽음. 오른쪽 클릭은 짧은 메뉴(설정·끝내기)
-  - 사용자가 RunCat 화면을 보여 주며 「IP·저장 공간 막대」 요청 → 정보 항목만 가져옴(생김새는 우리 것): 저장 공간 막대(80%↑ 주황·90%↑ 빨강) · 네트워크 연결 종류(SCDynamicStore 기본 연결 + 시스템 이름)·내부 IPv4(누르면 복사) · 메모리 앱/고정/압축 · CPU 대기 · 배터리(있는 맥만, IOPowerSources) · 발열 줄. 연결·배터리는 10초, 디스크는 30초마다
-  - 창 바깥 클릭: `.transient`만으로는 다른 앱 창을 눌러도 안 닫힘 → 창이 열린 동안만 전역 마우스 감시 + 앱 비활성화 때 닫음
-  - 「헷갈려요」 → 항목마다 따로 카드(옅은 바탕 + 얇은 테두리) · 항목 색을 옅게 깐 배지 아이콘 · 묶음 제목(성능 / 저장 공간·연결 / 많이 쓰는 프로그램 / 잠자기를 막는 프로그램) · 목록은 한 카드에 구분선
-- [x] 설정창(2026-11-20, `Settings.swift`): 아이콘 옆 숫자(미리 보기) · 갱신 간격 1/2/5초(기본 2) · 로그인할 때 자동 실행(`SMAppService.mainApp` — 앱이 있는 경로로 등록되니 /Applications에 둔 뒤 켜는 게 맞음) · 칩 색 설명 · 버전·GitHub
-- [ ] 나중에: 「동작 줄이기」·접근성 점검, 클릭 창 키보드 조작, README에 화면 설명
-- [x] 앱 아이콘(2026-11-20): 어두운 바탕 + 메뉴 막대와 같은 칩(흰 테두리·핀 3개씩·초록 안쪽에 은은한 빛) — `packaging/make-icon.swift` → `packaging/AppIcon.icns`
-- [x] 릴리스 준비(2026-11-20, DiSwitch에서 가져옴): 태그 `vX.Y.Z` → `.github/workflows/release.yml` → GitHub Release zip → `homebrew-tap`의 `Casks/hum.rb`(틀 `packaging/hum.rb`, postflight에서 quarantine 지움) · 릴리스 설명 `packaging/release-notes.md` · 설치 `brew install --cask kyungryeol-yoon/tap/hum`
-- [x] `v0.1.0` 릴리스(2026-11-21): 처음 태그(`7635bf0`)는 Actions Build 실패 — macos-15 러너의 예전 컴파일러가 `HistoryChart` body를 「reasonable time」 안에 타입 검사 못 함(이 맥 Swift 6.4는 통과). 식을 쪼갠 `c0af389`로 태그를 옮겨 다시 올림 → 사용자가 Actions 결과 확인 → `brew install --cask kyungryeol-yoon/tap/hum` 시험(지금 띄운 build/Hum.app은 먼저 끌 것) → **brew 설치 확인**(2026-11-21: `hum 0.1.0`, quarantine 없음, 실행 중)
-  - brew 경고 두 개(Homebrew 7.0): `depends_on macos: ">= :sequoia"`·`postflight do` 옛 문법 → 처음엔 두려다(예전 brew 호환) brew가 설치 전에 스스로 업데이트하니 새 문법으로 바꿈(2026-11-21): `depends_on macos: :sequoia` + `postflight_steps do run "/usr/bin/xattr", args: [..., "{{appdir}}/Hum.app"], writable_paths: ["{{appdir}}/Hum.app"] end`(writable_paths 없으면 샌드박스가 막음). 로컬 tap 사본을 고쳐 `brew reinstall --debug`로 확인 — 격리 표시가 붙은 뒤 이 단계가 지움. DiSwitch도 같이
-  - 교훈: SwiftUI body는 섹션 함수로 나누고, GeometryReader 안 계산은 타입을 밝힌 함수로 뺄 것
+- [ ] 「동작 줄이기」·접근성 점검, 상태 창 키보드 조작
+- [ ] README에 화면 설명·스크린샷
+- [ ] 나중에 볼 정보: 전력(비공개 IOReport), 열린 로컬 포트, 블루투스 기기 배터리, 인터넷 응답 속도
