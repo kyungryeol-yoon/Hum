@@ -15,7 +15,7 @@ APP=build/Hum.app
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp .build/release/Hum "$APP/Contents/MacOS/"
-[[ -f packaging/AppIcon.icns ]] && cp packaging/AppIcon.icns "$APP/Contents/Resources/"   # 아이콘: packaging/make-icon.swift(아직 없음)
+cp packaging/AppIcon.icns "$APP/Contents/Resources/"   # 아이콘을 바꾸려면 packaging/make-icon.swift
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

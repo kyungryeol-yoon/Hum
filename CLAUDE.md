@@ -36,5 +36,5 @@
   - 「헷갈려요」 → 항목마다 따로 카드(옅은 바탕 + 얇은 테두리) · 항목 색을 옅게 깐 배지 아이콘 · 묶음 제목(성능 / 저장 공간·연결 / 많이 쓰는 프로그램 / 잠자기를 막는 프로그램) · 목록은 한 카드에 구분선
 - [x] 설정창(2026-11-20, `Settings.swift`): 아이콘 옆 숫자(미리 보기) · 갱신 간격 1/2/5초(기본 2) · 로그인할 때 자동 실행(`SMAppService.mainApp` — 앱이 있는 경로로 등록되니 /Applications에 둔 뒤 켜는 게 맞음) · 칩 색 설명 · 버전·GitHub
 - [ ] 나중에: 「동작 줄이기」·접근성 점검, 클릭 창 키보드 조작, README에 화면 설명
-- [ ] 앱 아이콘 확정 → `packaging/make-icon.swift`
-- [ ] 빌드·릴리스 워크플로·cask(DiSwitch에서 가져옴)
+- [x] 앱 아이콘(2026-11-20): 어두운 바탕 + 메뉴 막대와 같은 칩(흰 테두리·핀 3개씩·초록 안쪽에 은은한 빛) — `packaging/make-icon.swift` → `packaging/AppIcon.icns`
+- [x] 릴리스 준비(2026-11-20, DiSwitch에서 가져옴): 태그 `vX.Y.Z` → `.github/workflows/release.yml` → GitHub Release zip → `homebrew-tap`의 `Casks/hum.rb`(틀 `packaging/hum.rb`, postflight에서 quarantine 지움) · 릴리스 설명 `packaging/release-notes.md` · 설치 `brew install --cask kyungryeol-yoon/tap/hum`

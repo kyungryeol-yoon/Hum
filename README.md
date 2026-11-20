@@ -20,6 +20,14 @@
 - **설정** — 아이콘 옆 숫자, 갱신 간격(1·2·5초), 로그인할 때 자동 실행
 - 가볍게 — 창이 닫혀 있을 때 CPU 1% 미만
 
+## 설치
+
+```sh
+brew install --cask kyungryeol-yoon/tap/hum
+```
+
+또는 [Releases](https://github.com/kyungryeol-yoon/hum/releases)에서 `Hum-<버전>.zip`을 받아 풀고 「응용 프로그램」 폴더로 옮기세요. 애플 개발자 서명을 하지 않은 앱이라, 처음 열 때 경고가 나오면 **시스템 설정 → 개인정보 보호 및 보안 → 그래도 열기**를 눌러 주세요(brew로 설치하면 필요 없음).
+
 ## 빌드
 
 ```sh

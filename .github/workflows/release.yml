@@ -1,0 +1,46 @@
+# 태그(v1.2.3)를 올리면: 빌드 → GitHub Release에 zip 첨부 → homebrew-tap의 cask 갱신
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-15
+    env:
+      TAP_TOKEN: ${{ secrets.TAP_TOKEN }}   # homebrew-tap에 쓸 수 있는 토큰. 없으면 tap 갱신은 건너뜀
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 빌드 번호(커밋 수)에 필요
+
+      - name: Build
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION="$VERSION" ./build.sh
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "SHA256=$(shasum -a 256 "build/Hum-$VERSION.zip" | cut -d' ' -f1)" >> "$GITHUB_ENV"
+
+      - name: GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "build/Hum-$VERSION.zip" \
+            --title "$GITHUB_REF_NAME" --notes-file packaging/release-notes.md --generate-notes
+
+      - name: Update Homebrew tap
+        if: env.TAP_TOKEN != ''
+        run: |
+          git clone "https://x-access-token:${TAP_TOKEN}@github.com/${{ github.repository_owner }}/homebrew-tap.git" tap
+          mkdir -p tap/Casks
+          sed -e "s/__VERSION__/$VERSION/" -e "s/__SHA256__/$SHA256/" packaging/hum.rb \
+            | grep -v '^# Homebrew cask 틀' > tap/Casks/hum.rb
+          cd tap
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Casks/hum.rb
+          git diff --cached --quiet || { git commit -m "hum $VERSION"; git push; }
