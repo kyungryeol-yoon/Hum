@@ -38,3 +38,4 @@
 - [ ] 나중에: 「동작 줄이기」·접근성 점검, 클릭 창 키보드 조작, README에 화면 설명
 - [x] 앱 아이콘(2026-11-20): 어두운 바탕 + 메뉴 막대와 같은 칩(흰 테두리·핀 3개씩·초록 안쪽에 은은한 빛) — `packaging/make-icon.swift` → `packaging/AppIcon.icns`
 - [x] 릴리스 준비(2026-11-20, DiSwitch에서 가져옴): 태그 `vX.Y.Z` → `.github/workflows/release.yml` → GitHub Release zip → `homebrew-tap`의 `Casks/hum.rb`(틀 `packaging/hum.rb`, postflight에서 quarantine 지움) · 릴리스 설명 `packaging/release-notes.md` · 설치 `brew install --cask kyungryeol-yoon/tap/hum`
+- [ ] `v0.1.0` 태그 푸시(2026-11-20, 커밋 `7635bf0`) → 사용자가 GitHub에서 Actions(빌드·Release·「Update Homebrew tap」) 결과 확인 → `brew install --cask kyungryeol-yoon/tap/hum`으로 실제 설치 시험(지금 띄운 build/Hum.app은 먼저 끌 것)

@@ -19,6 +19,19 @@ struct PanelView: View {
           Text("최근 \(historySpan)").font(.system(size: 10)).foregroundStyle(.tertiary).padding(4)
         }
 
+      performance(s)
+      storage(s)
+      programs
+      sleepBlockers
+      footer
+    }
+    .padding(16)
+    .frame(width: 340)
+  }
+
+  // 섹션마다 나눔 — 한 덩어리 body는 예전 컴파일러(GitHub Actions)에서 타입 검사가 너무 오래 걸림
+  @ViewBuilder private func performance(_ s: Snapshot) -> some View {
+    VStack(alignment: .leading, spacing: 10) {
       SectionTitle("성능", note: nil)
       VStack(spacing: 6) {
         Card {
@@ -37,6 +50,11 @@ struct PanelView: View {
         }
       }
 
+    }
+  }
+
+  @ViewBuilder private func storage(_ s: Snapshot) -> some View {
+    VStack(alignment: .leading, spacing: 10) {
       SectionTitle("저장 공간 · 연결", note: nil)
       VStack(spacing: 6) {
         if let free = s.diskFreeBytes, let total = s.diskTotalBytes, total > 0 {
@@ -63,6 +81,11 @@ struct PanelView: View {
         }
       }
 
+    }
+  }
+
+  @ViewBuilder private var programs: some View {
+    VStack(alignment: .leading, spacing: 10) {
       SectionTitle("많이 쓰는 프로그램", note: "내 계정 프로그램 · CPU 순")
       ListCard {
         if !monitor.detailsReady {
@@ -77,6 +100,11 @@ struct PanelView: View {
         }
       }
 
+    }
+  }
+
+  @ViewBuilder private var sleepBlockers: some View {
+    VStack(alignment: .leading, spacing: 10) {
       SectionTitle("잠자기를 막는 프로그램", note: nil)
       ListCard {
         if monitor.blockers.isEmpty {
@@ -89,6 +117,11 @@ struct PanelView: View {
         }
       }
 
+    }
+  }
+
+  @ViewBuilder private var footer: some View {
+    VStack(alignment: .leading, spacing: 10) {
       Divider()
       HStack {
         Button(action: openSettings) { Label("설정", systemImage: "gearshape") }
@@ -98,8 +131,6 @@ struct PanelView: View {
       .buttonStyle(.borderless)
       .font(.system(size: 12))
     }
-    .padding(16)
-    .frame(width: 340)
   }
 
   private func header(_ s: Snapshot, _ busy: Double) -> some View {
@@ -377,28 +408,54 @@ private struct HistoryChart: View {
   let capacity: Int
   let color: Color
 
+  // 식을 잘게 나눔 — 한 덩어리로 쓰면 예전 컴파일러(GitHub Actions)가 시간 안에 타입을 못 정함
   var body: some View {
-    GeometryReader { g in
-      let w = g.size.width, h = g.size.height
-      let step = w / Double(max(capacity - 1, 1))
-      let pts = values.enumerated().map { i, v in
-        CGPoint(x: w - Double(values.count - 1 - i) * step, y: h - 3 - (h - 6) * min(max(v, 0), 100) / 100)
-      }
-      ZStack {
-        RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.04))
-        if pts.count > 1 {
-          Path { p in
-            p.move(to: CGPoint(x: pts[0].x, y: h))
-            pts.forEach { p.addLine(to: $0) }
-            p.addLine(to: CGPoint(x: pts.last!.x, y: h))
-            p.closeSubpath()
-          }
-          .fill(LinearGradient(colors: [color.opacity(0.35), color.opacity(0.02)], startPoint: .top, endPoint: .bottom))
-          Path { p in p.addLines(pts) }
-            .stroke(color, style: StrokeStyle(lineWidth: 1.6, lineCap: .round, lineJoin: .round))
-        }
-      }
-      .clipShape(RoundedRectangle(cornerRadius: 8))
+    GeometryReader { (g: GeometryProxy) in
+      chart(size: g.size)
     }
+  }
+
+  private func points(in size: CGSize) -> [CGPoint] {
+    let w: Double = size.width
+    let h: Double = size.height
+    let step: Double = w / Double(max(capacity - 1, 1))
+    var out: [CGPoint] = []
+    out.reserveCapacity(values.count)
+    for (i, v) in values.enumerated() {
+      let back: Double = Double(values.count - 1 - i)
+      let level: Double = min(max(v, 0), 100) / 100
+      out.append(CGPoint(x: w - back * step, y: h - 3 - (h - 6) * level))
+    }
+    return out
+  }
+
+  private func area(_ pts: [CGPoint], height h: Double) -> Path {
+    var p = Path()
+    guard let first = pts.first, let last = pts.last else { return p }
+    p.move(to: CGPoint(x: first.x, y: h))
+    for pt in pts { p.addLine(to: pt) }
+    p.addLine(to: CGPoint(x: last.x, y: h))
+    p.closeSubpath()
+    return p
+  }
+
+  private func line(_ pts: [CGPoint]) -> Path {
+    var p = Path()
+    p.addLines(pts)
+    return p
+  }
+
+  @ViewBuilder private func chart(size: CGSize) -> some View {
+    let pts: [CGPoint] = points(in: size)
+    let fade = LinearGradient(colors: [color.opacity(0.35), color.opacity(0.02)], startPoint: .top, endPoint: .bottom)
+    let stroke = StrokeStyle(lineWidth: 1.6, lineCap: .round, lineJoin: .round)
+    ZStack {
+      RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.04))
+      if pts.count > 1 {
+        area(pts, height: size.height).fill(fade)
+        line(pts).stroke(color, style: stroke)
+      }
+    }
+    .clipShape(RoundedRectangle(cornerRadius: 8))
   }
 }
