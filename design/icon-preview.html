@@ -1,0 +1,295 @@
+<title>칩 아이콘 후보</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* 레이아웃: 위에 조작판(값·표시 방식), 아래에 후보 카드 4장(크게 보기 + 실제 크기 메뉴 막대) */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --fg:#1b2029; --muted:#5d6675; --line:#dde2ea;
+  --accent:#1f7a8c; --accent-soft:#e1f0f3;
+  --bar-light:#e8ebf0; --bar-light-fg:#1d1f24; --bar-dark:#25272c; --bar-dark-fg:#f2f3f5;
+  --font-body:"IBM Plex Sans KR",-apple-system,"Apple SD Gothic Neo",sans-serif;
+  --font-display:"Space Grotesk","IBM Plex Sans KR",-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111419; --surface:#1a1e25; --fg:#e8ebf0; --muted:#9aa3b2; --line:#2b313b;
+  --accent:#5cc0d2; --accent-soft:#16323a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111419; --surface:#1a1e25; --fg:#e8ebf0; --muted:#9aa3b2; --line:#2b313b;
+  --accent:#5cc0d2; --accent-soft:#16323a; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:22px}
+h1{font-family:var(--font-display);font-size:1.6rem;margin:0;text-wrap:balance}
+h2{font-family:var(--font-display);font-size:1.1rem;margin:0}
+p{margin:0}
+.lead{color:var(--muted);max-width:65ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:16px}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px 24px;align-items:start}
+.ctl{display:grid;gap:8px;min-width:0}
+.ctl-label{font-size:.78rem;letter-spacing:.04em;color:var(--muted);font-weight:600}
+.sl{display:grid;grid-template-columns:3.6em 1fr 3em;align-items:center;gap:8px;font-size:.9rem}
+.sl input{min-width:0;accent-color:var(--accent)}
+.sl output{font-variant-numeric:tabular-nums;text-align:right;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+button.chip{font:inherit;font-size:.85rem;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
+button.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+button.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:14px;min-width:0;align-content:start}
+.card .sub{color:var(--muted);font-size:.9rem}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{border-radius:10px;display:grid;place-items:center;padding:14px}
+.tile.light{background:var(--bar-light);color:var(--bar-light-fg)}
+.tile.dark{background:var(--bar-dark);color:var(--bar-dark-fg)}
+.tile .big{width:100%;max-width:110px;aspect-ratio:1}
+.tile svg,.ico svg{width:100%;height:100%;display:block}
+.bar{height:26px;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:0 10px;font-size:13px;font-family:-apple-system,"Apple SD Gothic Neo",sans-serif;overflow:hidden;white-space:nowrap}
+.bar.light{background:var(--bar-light);color:var(--bar-light-fg)}
+.bar.dark{background:var(--bar-dark);color:var(--bar-dark-fg)}
+.bar .item{display:flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.bar .ico{width:22px;height:22px;display:block}
+.bar .num{font-size:12px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.82rem;color:var(--muted)}
+.pros{font-size:.85rem;display:grid;gap:2px}
+.pros span{color:var(--muted)}
+.appicons{display:flex;flex-wrap:wrap;gap:18px;align-items:end}
+.appicons figure{margin:0;display:grid;gap:6px;justify-items:center;font-size:.8rem;color:var(--muted)}
+.appicons svg{display:block;max-width:100%;height:auto}
+.notes{display:grid;gap:6px;font-size:.88rem;color:var(--muted);max-width:75ch}
+.notes b{color:var(--fg);font-weight:600}
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:6px">
+    <h1>칩 아이콘 후보</h1>
+    <p class="lead">칩 하나에 CPU·메모리·GPU 세 값을 담는 다섯 가지 모양입니다(D·E는 회로형 새 후보). 평소엔 흑백이고, 70%를 넘는 항목만 주황, 90%를 넘으면 빨강이 됩니다. 값은 실제 앱처럼 조금씩 흔들리게 해 두었습니다.</p>
+  </header>
+
+  <section class="panel" aria-label="조작판">
+    <div class="controls">
+      <div class="ctl">
+        <span class="ctl-label">사용률</span>
+        <label class="sl">CPU<input id="cpu" type="range" min="0" max="100" value="28"><output id="cpuo">28%</output></label>
+        <label class="sl">메모리<input id="mem" type="range" min="0" max="100" value="55"><output id="memo">55%</output></label>
+        <label class="sl">GPU<input id="gpu" type="range" min="0" max="100" value="12"><output id="gpuo">12%</output></label>
+      </div>
+      <div class="ctl">
+        <span class="ctl-label">상황 예시</span>
+        <div class="chips" id="presets">
+          <button class="chip" data-v="4,40,2">한가함</button>
+          <button class="chip" data-v="28,55,12">보통</button>
+          <button class="chip" data-v="94,72,18">빌드 중</button>
+          <button class="chip" data-v="35,88,97">ollama 실행</button>
+          <button class="chip" data-v="20,96,8">메모리 부족</button>
+        </div>
+        <span class="ctl-label" style="margin-top:6px">값 흔들림</span>
+        <div class="chips" id="live">
+          <button class="chip" data-l="on" aria-pressed="true">실시간처럼</button>
+          <button class="chip" data-l="off">고정</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <span class="ctl-label">색</span>
+        <div class="chips" id="color">
+          <button class="chip" data-c="mono" aria-pressed="true">흑백 + 경고색</button>
+          <button class="chip" data-c="color">항상 컬러</button>
+        </div>
+        <span class="ctl-label" style="margin-top:6px">옆에 숫자</span>
+        <div class="chips" id="nums">
+          <button class="chip" data-n="none" aria-pressed="true">없음</button>
+          <button class="chip" data-n="max">가장 높은 값</button>
+          <button class="chip" data-n="all">세 개 다</button>
+        </div>
+      </div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section class="cards" id="cards"></section>
+
+  <section class="card" aria-label="앱 아이콘">
+    <div style="display:grid;gap:4px"><h2>앱 아이콘 (크게 쓰는 곳)</h2><p class="sub">회로형(D)을 그대로 키웠습니다. 회선 셋은 CPU·메모리·GPU 색(파랑·초록·보라)입니다.</p></div>
+    <div class="appicons" id="appicons"></div>
+  </section>
+
+  <section class="notes">
+    <p><b>메뉴 막대 크기:</b> 아이콘은 22pt입니다. 카드의 「실제 크기」 줄로 작게 봤을 때도 구분되는지 확인해 보세요.</p>
+    <p><b>숫자 표시:</b> 맥북은 노치 때문에 메뉴 막대 오른쪽 공간이 좁습니다. 숫자는 기본으로 끄고, 설정에서 켜는 쪽을 생각했습니다.</p>
+    <p><b>메모리:</b> 실제 앱에서는 사용률(%)보다 macOS의 「메모리 압박」으로 색을 정하는 게 더 정확합니다. 미리보기에선 같은 기준(70/90%)을 썼습니다.</p>
+  </section>
+</div>
+
+<script>
+const TAU = Math.PI * 2;
+const SYS = { warn: '#ff9f0a', crit: '#ff453a' };
+const HUE = { cpu: '#0a84ff', mem: '#30d158', gpu: '#bf5af2' };
+const KEYS = ['cpu', 'mem', 'gpu'];
+const LABEL = { cpu: 'CPU', mem: '메모리', gpu: 'GPU' };
+const st = { target: { cpu: 28, mem: 55, gpu: 12 }, shown: { cpu: 28, mem: 55, gpu: 12 }, noisy: { cpu: 28, mem: 55, gpu: 12 }, live: true, mono: true, nums: 'none' };
+
+const level = v => v >= 90 ? 'crit' : v >= 70 ? 'warn' : 'ok';
+const colorOf = k => { const v = st.shown[k], l = level(v); if (l !== 'ok') return SYS[l]; return st.mono ? 'currentColor' : HUE[k]; };
+const track = 'opacity="0.22"';
+
+// 공통 칩 테두리: 네 변에 핀 3개씩
+function chipFrame() {
+  let s = '<rect x="8.5" y="8.5" width="27" height="27" rx="4.5" fill="none" stroke="currentColor" stroke-width="2.6"/>';
+  for (const c of [15.8, 22, 28.2]) {
+    s += `<rect x="${c - 1.25}" y="2.5" width="2.5" height="5" rx="1" fill="currentColor"/><rect x="${c - 1.25}" y="36.5" width="2.5" height="5" rx="1" fill="currentColor"/>`;
+    s += `<rect x="2.5" y="${c - 1.25}" width="5" height="2.5" rx="1" fill="currentColor"/><rect x="36.5" y="${c - 1.25}" width="5" height="2.5" rx="1" fill="currentColor"/>`;
+  }
+  return s;
+}
+
+const VARIANTS = [
+  { key: 'bars', title: 'A. 막대형', sub: '칩 안에 세로 막대 셋. 왼쪽부터 CPU·메모리·GPU.',
+    pro: '가장 읽기 쉬움', con: '흔한 그래프 느낌',
+    draw: () => { let s = chipFrame();
+      KEYS.forEach((k, i) => { const x = 13.4 + i * 6.3, h = Math.max(1.2, st.shown[k] / 100 * 17.5), c = colorOf(k);
+        s += `<rect x="${x}" y="13" width="4.6" height="17.5" rx="1.2" fill="currentColor" ${track}/>`;
+        s += `<rect x="${x}" y="${30.5 - h}" width="4.6" height="${h}" rx="1.2" fill="${c}"/>`; });
+      return s; } },
+  { key: 'rings', title: 'B. 링형', sub: '바깥부터 CPU·메모리·GPU 고리. 차오른 만큼 사용 중.',
+    pro: '예쁘고 부드러움', con: '22pt에서 안쪽 고리가 작음',
+    draw: () => { let s = chipFrame();
+      [[9.4, 'cpu'], [6.2, 'mem'], [3, 'gpu']].forEach(([r, k]) => { const circ = TAU * r, p = Math.max(0.02, st.shown[k] / 100);
+        s += `<circle cx="22" cy="22" r="${r}" fill="none" stroke="currentColor" stroke-width="2.1" ${track}/>`;
+        s += `<circle cx="22" cy="22" r="${r}" fill="none" stroke="${colorOf(k)}" stroke-width="2.1" stroke-linecap="round" stroke-dasharray="${(p * circ).toFixed(2)} ${circ.toFixed(2)}" transform="rotate(-90 22 22)"/>`; });
+      return s; } },
+  { key: 'grid', title: 'C. 격자형', sub: '세 줄 × 네 칸. 윗줄부터 CPU·메모리·GPU, 25%마다 한 칸.',
+    pro: '또렷하고 칩다움', con: '값이 4단계로만 보임',
+    draw: () => { let s = chipFrame();
+      KEYS.forEach((k, row) => { const lit = Math.round(st.shown[k] / 25), c = colorOf(k);
+        for (let col = 0; col < 4; col++) { const x = 12.6 + col * 5, y = 13 + row * 6.2, on = col < lit;
+          s += `<rect x="${x}" y="${y}" width="3.8" height="4.6" rx="0.9" fill="${on ? c : 'currentColor'}" ${on ? '' : track}/>`; } });
+      return s; } },
+  { key: 'circuit', title: 'D. 회로형', sub: '왼쪽 핀에서 들어오는 회선 셋. 위부터 CPU·메모리·GPU, 신호가 들어간 만큼 사용 중.',
+    pro: '칩다움이 가장 강함', con: '막대보다 길이 비교가 조금 어려움',
+    draw: () => { let s = chipFrame();
+      const TR = [['cpu', 'M9.8 15.8 H19 L22 18.8 H28.6', [30.4, 18.8]], ['mem', 'M9.8 22 H16 L19 25 H24.6', [26.4, 25]], ['gpu', 'M9.8 28.2 H28.6', [30.4, 28.2]]];
+      for (const [k, d, [px, py]] of TR) { const p = Math.max(1, st.shown[k]), c = colorOf(k);
+        s += `<path d="${d}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" ${track}/>`;
+        s += `<path d="${d}" pathLength="100" fill="none" stroke="${c}" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="${p.toFixed(1)} 100"/>`;
+        s += `<circle cx="${px}" cy="${py}" r="1.5" fill="none" stroke="${p >= 97 ? c : 'currentColor'}" stroke-width="1.3" ${p >= 97 ? '' : 'opacity="0.55"'}/>`; }
+      return s; } },
+  { key: 'dense', title: 'E. 촘촘 회로형', sub: '회선 여섯 가닥. 셋 중 가장 바쁜 값만큼 회선에 불이 들어옴.',
+    pro: '오밀조밀한 느낌', con: '세 값을 따로 볼 수 없음, 실제 크기에선 뭉개짐',
+    draw: () => { let s = chipFrame();
+      const worst = KEYS.reduce((a, b) => st.shown[b] > st.shown[a] ? b : a), lit = Math.round(st.shown[worst] / 100 * 6), c = colorOf(worst);
+      const ends = [24, 29.5, 26, 31, 22.5, 28];
+      for (let i = 0; i < 6; i++) { const y = 12.5 + i * 3.3, y2 = y + 3.3, on = i >= 6 - lit;
+        const col = on ? c : 'currentColor', op = on ? '' : 'opacity="0.3"';
+        s += `<path d="M9.8 ${y} H16 L19.3 ${y2} H${ends[i]}" fill="none" stroke="${col}" stroke-width="1.15" stroke-linejoin="round" ${op}/>`;
+        s += `<circle cx="${ends[i] + 1.2}" cy="${y2}" r="1.1" fill="none" stroke="${col}" stroke-width="0.9" ${op}/>`; }
+      return s; } },
+];
+
+// ---- 카드 만들기 ----
+const cards = document.getElementById('cards');
+VARIANTS.forEach(v => {
+  const el = document.createElement('article'); el.className = 'card';
+  const bar = cls => `<div class="bar ${cls}"><span class="item"><span class="ico" data-v="${v.key}"></span><span class="num" data-n="${v.key}"></span></span><span>100%</span><span>오후 10:42</span></div>`;
+  el.innerHTML = `<div style="display:grid;gap:4px"><h2>${v.title}</h2><p class="sub">${v.sub}</p></div>
+    <div class="tiles"><div class="tile light"><div class="big" data-v="${v.key}"></div></div><div class="tile dark"><div class="big" data-v="${v.key}"></div></div></div>
+    <div style="display:grid;gap:6px"><span class="ctl-label">실제 크기</span>${bar('light')}${bar('dark')}</div>
+    <div class="pros"><div>좋은 점: <span>${v.pro}</span></div><div>아쉬운 점: <span>${v.con}</span></div></div>`;
+  cards.appendChild(el);
+});
+const targets = [...document.querySelectorAll('[data-v]')];
+const numEls = [...document.querySelectorAll('[data-n]')].filter(e => e.classList.contains('num'));
+
+// ---- 조작 ----
+for (const k of KEYS) { const inp = document.getElementById(k), out = document.getElementById(k + 'o');
+  inp.addEventListener('input', () => { st.target[k] = +inp.value; st.noisy[k] = +inp.value; out.textContent = inp.value + '%'; }); }
+document.getElementById('presets').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+  b.dataset.v.split(',').map(Number).forEach((v, i) => { const k = KEYS[i]; st.target[k] = v; st.noisy[k] = v;
+    document.getElementById(k).value = v; document.getElementById(k + 'o').textContent = v + '%'; }); });
+function group(id, attr, set) { const box = document.getElementById(id);
+  box.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+    box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false')); set(b.dataset[attr]); }); }
+group('live', 'l', v => st.live = v === 'on');
+group('color', 'c', v => st.mono = v === 'mono');
+group('nums', 'n', v => st.nums = v);
+
+// ---- 값 흔들림(1초마다 새 값, 그 사이는 부드럽게) ----
+const SPREAD = { cpu: 9, mem: 1.5, gpu: 6 };
+setInterval(() => {
+  for (const k of KEYS) st.noisy[k] = st.live ? Math.max(0, Math.min(100, st.target[k] + (Math.random() * 2 - 1) * SPREAD[k])) : st.target[k];
+}, 1000);
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let last = 0;
+function frame(now) {
+  if (now - last > (reduce ? 500 : 33)) { last = now;
+    for (const k of KEYS) st.shown[k] += (st.noisy[k] - st.shown[k]) * (reduce ? 1 : 0.18);
+    draw(); }
+  requestAnimationFrame(frame);
+}
+function numText() {
+  const r = k => Math.round(st.shown[k]);
+  if (st.nums === 'max') { const k = KEYS.reduce((a, b) => st.shown[b] > st.shown[a] ? b : a); return `${r(k)}%`; }
+  if (st.nums === 'all') return `C${r('cpu')} M${r('mem')} G${r('gpu')}`;
+  return '';
+}
+function draw() {
+  const cache = {};
+  for (const v of VARIANTS) cache[v.key] = `<svg viewBox="0 0 44 44" aria-hidden="true">${v.draw()}</svg>`;
+  for (const el of targets) el.innerHTML = cache[el.dataset.v];
+  const t = numText();
+  for (const el of numEls) el.textContent = t;
+  document.getElementById('legend').innerHTML = KEYS.map(k => { const l = level(st.shown[k]);
+    return `<span>${LABEL[k]} ${Math.round(st.shown[k])}% · ${l === 'ok' ? '정상' : l === 'warn' ? '주의(주황)' : '위험(빨강)'}</span>`; }).join('');
+}
+requestAnimationFrame(frame);
+
+// ---- 앱 아이콘: 회선을 절차적으로 그림 ----
+function appIcon(theme) {
+  const T = theme === 'copper'
+    ? { bg1: '#1a2130', bg2: '#0d1119', body: '#161c28', line: '#e0a35c', die: '#232b3a', glow: '#e0a35c' }
+    : { bg1: '#f4f6fa', bg2: '#dfe4ec', body: '#ffffff', line: '#1f2733', die: '#e9edf3', glow: '#0a84ff' };
+  const N = 7, pos = k => 30 + k * (40 / 6), dieP = k => 43.5 + k * (13 / 6);
+  let inner = '', outer = '';
+  const outLen = [7, 12, 5, 10, 14, 6, 9];
+  for (let k = 0; k < N; k++) {
+    const t = pos(k), y2 = dieP(k), d = Math.abs(t - y2), xs = 41.5 - d;
+    inner += `<path d="M26 ${t.toFixed(2)} H${xs.toFixed(2)} L41.5 ${y2.toFixed(2)} H42.5"/>`;
+    if (k % 3 === 1) inner += `<circle cx="${(xs - 2.2).toFixed(2)}" cy="${t.toFixed(2)}" r="0.9" fill="${T.line}" stroke="none"/>`;
+    const L = outLen[k], dy = (k - 3) * 1.6, xb = 21 - L * 0.45, xe = 21 - L;
+    outer += `<path d="M21 ${t.toFixed(2)} H${xb.toFixed(2)} L${(xb - Math.abs(dy)).toFixed(2)} ${(t + dy).toFixed(2)} H${(xe - Math.abs(dy) * 0.4).toFixed(2)}"/>`;
+    outer += `<circle cx="${(xe - Math.abs(dy) * 0.4 - 1.3).toFixed(2)}" cy="${(t + dy).toFixed(2)}" r="1.3" fill="${k % 2 ? T.line : 'none'}"/>`;
+  }
+  let pins = '';
+  for (let k = 0; k < N; k++) pins += `<rect x="20.5" y="${(pos(k) - 1.1).toFixed(2)}" width="6" height="2.2" rx="0.6"/>`;
+  const side = g => [0, 90, 180, 270].map(r => `<g transform="rotate(${r} 50 50)">${g}</g>`).join('');
+  const id = 'ai' + theme;
+  return `<svg viewBox="0 0 100 100" width="200" height="200" aria-label="앱 아이콘 ${theme}">
+    <defs><linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${T.bg1}"/><stop offset="1" stop-color="${T.bg2}"/></linearGradient>
+    <radialGradient id="${id}r" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="${T.glow}" stop-opacity="0.35"/><stop offset="1" stop-color="${T.glow}" stop-opacity="0"/></radialGradient></defs>
+    <rect x="2" y="2" width="96" height="96" rx="22" fill="url(#${id}g)"/>
+    <g fill="none" stroke="${T.line}" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.85">${side(outer)}</g>
+    <g fill="${T.line}">${side(pins)}</g>
+    <rect x="26" y="26" width="48" height="48" rx="5" fill="${T.body}" stroke="${T.line}" stroke-width="1.6"/>
+    <g fill="none" stroke="${T.line}" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round" opacity="0.9">${side(inner)}</g>
+    <circle cx="50" cy="50" r="14" fill="url(#${id}r)"/>
+    <rect x="42.5" y="42.5" width="15" height="15" rx="2" fill="${T.die}" stroke="${T.line}" stroke-width="1"/>
+  </svg>`;
+}
+// 회로형(D)을 그대로 키운 앱 아이콘
+function circuitIcon(bg, fg, colors, size) {
+  const TR = [['M9.8 15.8 H19 L22 18.8 H28.6', [30.4, 18.8], 0.75], ['M9.8 22 H16 L19 25 H24.6', [26.4, 25], 0.5], ['M9.8 28.2 H28.6', [30.4, 28.2], 1]];
+  let s = `<rect x="0" y="0" width="44" height="44" rx="10" fill="${bg}"/><g transform="translate(6.6 6.6) scale(0.7)" color="${fg}">${chipFrame()}`;
+  TR.forEach(([d, [px, py], p], i) => { const c = colors ? colors[i] : fg;
+    s += `<path d="${d}" fill="none" stroke="${fg}" stroke-width="1.8" stroke-linejoin="round" opacity="0.25"/>`;
+    s += `<path d="${d}" pathLength="100" fill="none" stroke="${c}" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="${p * 100} 100"/>`;
+    s += `<circle cx="${px}" cy="${py}" r="1.5" fill="none" stroke="${p >= 1 ? c : fg}" stroke-width="1.3" ${p >= 1 ? '' : 'opacity="0.55"'}/>`; });
+  return `<svg viewBox="0 0 44 44" width="${size}" height="${size}">${s}</g></svg>`;
+}
+document.getElementById('appicons').innerHTML =
+  [['#1b2130', '#f2f4f8', [HUE.cpu, HUE.mem, HUE.gpu], '어두운 바탕 · 컬러 회선'], ['#1b2130', '#f2f4f8', null, '어두운 바탕 · 흰색'], ['#f2f4f8', '#1b2130', [HUE.cpu, HUE.mem, HUE.gpu], '밝은 바탕 · 컬러 회선']]
+    .map(([bg, fg, cols, cap]) => `<figure>${circuitIcon(bg, fg, cols, 160)}<figcaption>${cap}</figcaption></figure>`).join('')
+  + `<figure><div style="display:flex;gap:10px;align-items:end">${circuitIcon('#1b2130', '#f2f4f8', [HUE.cpu, HUE.mem, HUE.gpu], 64)}${circuitIcon('#1b2130', '#f2f4f8', [HUE.cpu, HUE.mem, HUE.gpu], 32)}</div><figcaption>Dock·Finder 크기</figcaption></figure>`;
+const oldAppIcons = () =>
+  [['copper', '어두운 바탕 · 구리색 회로'], ['ink', '밝은 바탕 · 먹색 회로']].map(([t, cap]) =>
+    `<figure>${appIcon(t)}<figcaption>${cap}</figcaption></figure>`).join('')
+  + `<figure><div style="display:flex;gap:10px;align-items:end">${appIcon('copper').replace('width="200" height="200"', 'width="64" height="64"')}${appIcon('copper').replace('width="200" height="200"', 'width="32" height="32"')}</div><figcaption>Dock·Finder 크기</figcaption></figure>`;
+</script>
