@@ -10,13 +10,24 @@ permissions:
 
 jobs:
   release:
-    runs-on: macos-15
+    runs-on: macos-26   # GitHub이 주는 가장 새 macOS 머신(예전 macos-15는 Xcode가 오래돼 빌드 실패한 적 있음)
     env:
       TAP_TOKEN: ${{ secrets.TAP_TOKEN }}   # homebrew-tap에 쓸 수 있는 토큰. 없으면 tap 갱신은 건너뜀
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0   # 빌드 번호(커밋 수)에 필요
+
+      # 머신에 깔린 Xcode 중 가장 새 정식판을 고름
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Show versions   # 로그에 남겨서 이 맥(xcodebuild -version)과 비교할 수 있게
+        run: |
+          sw_vers
+          xcodebuild -version
+          swift --version
 
       - name: Build
         run: |

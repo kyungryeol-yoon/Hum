@@ -38,4 +38,5 @@
 - [ ] 나중에: 「동작 줄이기」·접근성 점검, 클릭 창 키보드 조작, README에 화면 설명
 - [x] 앱 아이콘(2026-11-20): 어두운 바탕 + 메뉴 막대와 같은 칩(흰 테두리·핀 3개씩·초록 안쪽에 은은한 빛) — `packaging/make-icon.swift` → `packaging/AppIcon.icns`
 - [x] 릴리스 준비(2026-11-20, DiSwitch에서 가져옴): 태그 `vX.Y.Z` → `.github/workflows/release.yml` → GitHub Release zip → `homebrew-tap`의 `Casks/hum.rb`(틀 `packaging/hum.rb`, postflight에서 quarantine 지움) · 릴리스 설명 `packaging/release-notes.md` · 설치 `brew install --cask kyungryeol-yoon/tap/hum`
-- [ ] `v0.1.0` 태그 푸시(2026-11-20, 커밋 `7635bf0`) → 사용자가 GitHub에서 Actions(빌드·Release·「Update Homebrew tap」) 결과 확인 → `brew install --cask kyungryeol-yoon/tap/hum`으로 실제 설치 시험(지금 띄운 build/Hum.app은 먼저 끌 것)
+- [ ] `v0.1.0` 릴리스(2026-11-21): 처음 태그(`7635bf0`)는 Actions Build 실패 — macos-15 러너의 예전 컴파일러가 `HistoryChart` body를 「reasonable time」 안에 타입 검사 못 함(이 맥 Swift 6.4는 통과). 식을 쪼갠 `c0af389`로 태그를 옮겨 다시 올림 → 사용자가 Actions 결과 확인 → `brew install --cask kyungryeol-yoon/tap/hum` 시험(지금 띄운 build/Hum.app은 먼저 끌 것)
+  - 교훈: SwiftUI body는 섹션 함수로 나누고, GeometryReader 안 계산은 타입을 밝힌 함수로 뺄 것
