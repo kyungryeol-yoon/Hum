@@ -21,7 +21,7 @@ final class Settings: ObservableObject {
 
 struct SettingsView: View {
   @ObservedObject var settings: Settings
-  @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
+  @State private var loginStatus = SMAppService.mainApp.status
   @State private var loginError: String?
 
   private var version: String { Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "개발판" }
@@ -54,10 +54,12 @@ struct SettingsView: View {
       }
 
       Section {
-        Toggle("로그인할 때 자동으로 실행", isOn: $launchAtLogin)
-          .onChange(of: launchAtLogin) { _, on in setLaunchAtLogin(on) }
+        // 사용자가 스위치를 눌렀을 때만 등록·해제(실제 상태로 맞추는 것이 다시 등록·해제를 부르지 않게)
+        Toggle("로그인할 때 자동으로 실행", isOn: Binding(
+          get: { loginStatus == .enabled || loginStatus == .requiresApproval },
+          set: { setLaunchAtLogin($0) }))
       } footer: {
-        if let loginError { Text(loginError).font(.caption).foregroundStyle(.red) }
+        loginFooter
       }
 
       Section("칩 색") {
@@ -77,6 +79,9 @@ struct SettingsView: View {
       }
     }
     .formStyle(.grouped)
+    .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
+      loginStatus = SMAppService.mainApp.status   // 시스템 설정에서 바꿨을 수 있음
+    }
     .frame(width: 420)
     .fixedSize(horizontal: false, vertical: true)
   }
@@ -89,6 +94,18 @@ struct SettingsView: View {
     }
   }
 
+  @ViewBuilder private var loginFooter: some View {
+    if let loginError {
+      Text(loginError).font(.caption).foregroundStyle(.red)
+    } else if loginStatus == .requiresApproval {
+      HStack(spacing: 6) {
+        Text("시스템 설정 → 일반 → 로그인 항목에서 Hum을 허용해 주세요.").font(.caption).foregroundStyle(.secondary)
+        Button("열기") { SMAppService.openSystemSettingsLoginItems() }
+          .buttonStyle(.link).font(.caption)
+      }
+    }
+  }
+
   private func setLaunchAtLogin(_ on: Bool) {
     do {
       if on { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }
@@ -96,7 +113,7 @@ struct SettingsView: View {
     } catch {
       loginError = "설정하지 못했어요: \(error.localizedDescription)"
     }
-    launchAtLogin = SMAppService.mainApp.status == .enabled
+    loginStatus = SMAppService.mainApp.status
   }
 }
 
